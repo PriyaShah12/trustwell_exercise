@@ -1,4 +1,5 @@
 import pandas as pd
+import pytest
 from utilities import path_utils
 import allure
 
@@ -22,6 +23,7 @@ class Test_001:
 
     '''This method will test happy path where all inputs are integers and carbs is
     greater than dietry-fiber'''
+    # @pytest.mark.skip
     def test_calorie_count_with_valid_inputs(self):
         file = self.test_calorie_sheet()
         df = pd.read_excel(file)
@@ -31,12 +33,14 @@ class Test_001:
         if carbs >= dietry_fiber:
             total_calories = Test_001.calculate_calories(protein, carbs, dietry_fiber, fat, alcohol)
             print(f'total_calories is {total_calories}')
-            assert expected == total_calories,'Carbs is greater than dietry-fiber and all inputs are positive'
+            assert expected == total_calories,'Check all inputs'
         else:
             assert False
 
     '''This method will test if dietry-fiber is greater than carbs then calorie count 
         doesn't match as expected because absolute value is not taken'''
+
+    # @pytest.mark.skip
     def test_dietry_fiber_greater_than_carbs(self):
         file = self.test_calorie_sheet()
         df = pd.read_excel(file)
@@ -45,11 +49,13 @@ class Test_001:
         protein, carbs, dietry_fiber, fat, alcohol, expected = df.iloc[1].tolist()
         total_calories = Test_001.calculate_calories(protein, carbs, dietry_fiber, fat, alcohol)
         print(f'total_calories is {total_calories}')
-        assert expected == total_calories,'If dietry-fiber is greater than carbs then calorie count does not match'
+        assert expected == total_calories,'If dietry-fiber is greater than carbs then calorie count does not calculate as expected'
 
 
     '''This method will test if dietry-fiber is greater than carbs and calorie count comes negative
     which is not as expected'''
+
+    # @pytest.mark.skip
     def test_negative_calorie_count(self):
         file = self.test_calorie_sheet()
         df = pd.read_excel(file)
@@ -58,29 +64,53 @@ class Test_001:
         protein, carbs, dietry_fiber, fat, alcohol, expected = df.iloc[2].tolist()
         total_calories = Test_001.calculate_calories(protein, carbs, dietry_fiber, fat, alcohol)
         print(f'total_calories is {total_calories}')
-        assert total_calories == expected, "if dietry-fiber is greater than carbs then calorie count comes negative which is not as expected"
+        assert total_calories == expected, "If dietry-fiber is greater than carbs then calorie count comes negative which is not as expected"
 
-    '''def test_should_not_calculate_if_any_input_is_string(self):
+
+
+    def test_calories_with_string_or_alphanumeric_as_input(self):
         file = self.test_calorie_sheet()
         df = pd.read_excel(file)
         print(df)
-        print(df.iloc[1].tolist())  # Get the third Row of Pandas as a List
-        [protein, carbs, dietry_fiber, fat, alcohol, expected]= df.iloc[1].tolist()
-        print("Data is-->", protein, carbs, dietry_fiber, fat, alcohol, expected)
-        self.calculate_calories(protein, carbs, dietry_fiber, fat, alcohol)
+        try:
+            protein, carbs, dietry_fiber, fat, alcohol, expected = df.iloc[4].tolist()
+            print(df.iloc[4].tolist())
+            val = Test_001.isnumber(protein, carbs, dietry_fiber, fat, alcohol)
+            if val == False:
+                assert False, 'Inputs are not digits'
+            else:
+                protein, carbs, dietry_fiber, fat, alcohol, expected = df.iloc[5].tolist()
+                print(df.iloc[5].tolist())
+                another_val = Test_001.isnumber(protein, carbs, dietry_fiber, fat, alcohol)
+                if another_val == False:
+                    assert False, "Inputs are alpha numeric"
+                else:
+                    assert True
+        except Exception as e:
+            print(f'Exception is---->>>{e}')
+
+    @staticmethod
+    def isnumber(*s):
+        for input in s:
+            if isinstance(input, int) != True:
+                return False
 
 
-    def test_if_any_or_all_inputs_are_string(self):
-        file = self.test_calorie_sheet()
-        df = pd.read_excel(file)
-        print(df)
-        print(df.iloc[1].tolist())  #Get the second Row of Pandas as a List
-        # protein, carbs, dietry_fiber, fat, alcohol, expected = df.iloc[1].tolist()
-        l = df.iloc[1].tolist()
-        print(l)
-        # new_lst = l.pop()
-        # for item in new_lst:
-        #     print(item)'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
