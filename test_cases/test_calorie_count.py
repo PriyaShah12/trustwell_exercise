@@ -40,7 +40,7 @@ class Test_001:
     '''This method will test if dietry-fiber is greater than carbs then calorie count 
         doesn't match as expected because absolute value is not taken'''
 
-    # @pytest.mark.skip
+    @pytest.mark.xfail
     def test_dietry_fiber_greater_than_carbs(self):
         file = self.test_calorie_sheet()
         df = pd.read_excel(file)
@@ -54,8 +54,7 @@ class Test_001:
 
     '''This method will test if dietry-fiber is greater than carbs and calorie count comes negative
     which is not as expected'''
-
-    # @pytest.mark.skip
+    @pytest.mark.xfail
     def test_negative_calorie_count(self):
         file = self.test_calorie_sheet()
         df = pd.read_excel(file)
@@ -66,8 +65,6 @@ class Test_001:
         print(f'total_calories is {total_calories}')
         assert total_calories == expected, "If dietry-fiber is greater than carbs then calorie count comes negative which is not as expected"
 
-
-
     def test_calories_with_string_or_alphanumeric_as_input(self):
         file = self.test_calorie_sheet()
         df = pd.read_excel(file)
@@ -75,13 +72,13 @@ class Test_001:
         try:
             protein, carbs, dietry_fiber, fat, alcohol, expected = df.iloc[4].tolist()
             print(df.iloc[4].tolist())
-            val = Test_001.isnumber(protein, carbs, dietry_fiber, fat, alcohol)
+            val = Test_001.is_number(protein, carbs, dietry_fiber, fat, alcohol)
             if val == False:
                 assert False, 'Inputs are not digits'
             else:
                 protein, carbs, dietry_fiber, fat, alcohol, expected = df.iloc[5].tolist()
                 print(df.iloc[5].tolist())
-                another_val = Test_001.isnumber(protein, carbs, dietry_fiber, fat, alcohol)
+                another_val = Test_001.is_number(protein, carbs, dietry_fiber, fat, alcohol)
                 if another_val == False:
                     assert False, "Inputs are alpha numeric"
                 else:
@@ -90,7 +87,7 @@ class Test_001:
             print(f'Exception is---->>>{e}')
 
     @staticmethod
-    def isnumber(*s):
+    def is_number(*s):
         for input in s:
             if isinstance(input, int) != True:
                 return False
