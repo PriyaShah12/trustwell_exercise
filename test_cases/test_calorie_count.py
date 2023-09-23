@@ -20,7 +20,6 @@ class Test_001:
         print(calories)
         return calories
 
-
     '''This method will test happy path where all inputs are integers and carbs is
     greater than dietry-fiber'''
     def test_calorie_count_with_valid_inputs(self):
@@ -60,8 +59,6 @@ class Test_001:
         total_calories = Test_001.calculate_calories(protein, carbs, dietry_fiber, fat, alcohol)
         print(f'total_calories is {total_calories}')
         assert total_calories == expected, "if dietry-fiber is greater than carbs then calorie count comes negative which is not as expected"
-
-
 
     '''def test_should_not_calculate_if_any_input_is_string(self):
         file = self.test_calorie_sheet()
