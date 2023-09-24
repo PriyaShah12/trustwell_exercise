@@ -1,7 +1,10 @@
+import time
+
 import pandas as pd
 import pytest
 from utilities import path_utils
 import allure
+import re
 
 
 class Test_001:
@@ -23,7 +26,6 @@ class Test_001:
 
     '''This method will test happy path where all inputs are integers and carbs is
     greater than dietry-fiber'''
-    # @pytest.mark.skip
     def test_calorie_count_with_valid_inputs(self):
         file = self.test_calorie_sheet()
         df = pd.read_excel(file)
@@ -39,7 +41,6 @@ class Test_001:
 
     '''This method will test if dietry-fiber is greater than carbs then calorie count 
         doesn't match as expected because absolute value is not taken'''
-
     @pytest.mark.xfail
     def test_dietry_fiber_greater_than_carbs(self):
         file = self.test_calorie_sheet()
@@ -65,32 +66,49 @@ class Test_001:
         print(f'total_calories is {total_calories}')
         assert total_calories == expected, "If dietry-fiber is greater than carbs then calorie count comes negative which is not as expected"
 
+    @pytest.mark.xfail
     def test_calories_with_string_or_alphanumeric_as_input(self):
         file = self.test_calorie_sheet()
         df = pd.read_excel(file)
         print(df)
-        try:
-            protein, carbs, dietry_fiber, fat, alcohol, expected = df.iloc[4].tolist()
-            print(df.iloc[4].tolist())
-            val = Test_001.is_number(protein, carbs, dietry_fiber, fat, alcohol)
-            if val == False:
-                assert False, 'Inputs are not digits'
-            else:
-                protein, carbs, dietry_fiber, fat, alcohol, expected = df.iloc[5].tolist()
-                print(df.iloc[5].tolist())
-                another_val = Test_001.is_number(protein, carbs, dietry_fiber, fat, alcohol)
-                if another_val == False:
-                    assert False, "Inputs are alpha numeric"
-                else:
-                    assert True
-        except Exception as e:
-            print(f'Exception is---->>>{e}')
+        protein, carbs, dietry_fiber, fat, alcohol, expected = df.iloc[4].tolist()
+        print(df.iloc[4].tolist())
+        val = Test_001.is_number(protein, carbs, dietry_fiber, fat, alcohol)
+        protein1, carbs2, dietry_fiber3, fat4, alcohol5, expected6 = df.iloc[5].tolist()
+        print(df.iloc[5].tolist())
+        another_val = Test_001.is_number(protein1, carbs2, dietry_fiber3, fat4, alcohol5)
+        print(f'Val is {val} and another_val is {another_val}')
+        if val == True and another_val == True:
+            assert True
+        elif val == False and another_val == False:
+            assert False, "Inputs are string or alphanumeric"
+        elif val == False:
+            assert False, "Inputs are string"
+        elif another_val == False:
+            assert False, "Inputs are alphanumeric"
 
     @staticmethod
     def is_number(*s):
-        for input in s:
+        for input in (s):
+            print(input, '->', isinstance(input, int))
             if isinstance(input, int) != True:
                 return False
+        return True
+
+    @pytest.mark.xfail
+    def test_if_dietry_fiber_is_negative(self):
+        file = self.test_calorie_sheet()
+        df = pd.read_excel(file)
+        print(df)
+        print(df.iloc[3].tolist())  # Get the third Row from excel using Pandas as a List
+        protein, carbs, dietry_fiber, fat, alcohol, expected = df.iloc[3].tolist()
+        total_calories = Test_001.calculate_calories(protein, carbs, dietry_fiber, fat, alcohol)
+        print(f'total_calories is {total_calories}')
+        assert total_calories == expected, "If dietry-fiber is greater than carbs then calorie count comes "
+
+
+
+
 
 
 
