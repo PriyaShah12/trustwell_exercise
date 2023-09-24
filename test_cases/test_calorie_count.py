@@ -1,10 +1,7 @@
-import time
-
 import pandas as pd
 import pytest
 from utilities import path_utils
 import allure
-import re
 
 
 class Test_001:
@@ -25,7 +22,7 @@ class Test_001:
         return calories
 
     '''This method will test happy path where all inputs are integers and carbs is
-    greater than dietry-fiber'''
+        greater than dietry-fiber'''
     def test_calorie_count_with_valid_inputs(self):
         file = self.test_calorie_sheet()
         df = pd.read_excel(file)
@@ -40,7 +37,7 @@ class Test_001:
             assert False
 
     '''This method will test if dietry-fiber is greater than carbs then calorie count 
-        doesn't match as expected because absolute value is not taken'''
+        doesn't match as expected'''
     @pytest.mark.xfail
     def test_dietry_fiber_greater_than_carbs(self):
         file = self.test_calorie_sheet()
@@ -54,7 +51,7 @@ class Test_001:
 
 
     '''This method will test if dietry-fiber is greater than carbs and calorie count comes negative
-    which is not as expected'''
+        which is not as expected'''
     @pytest.mark.xfail
     def test_negative_calorie_count(self):
         file = self.test_calorie_sheet()
@@ -66,6 +63,20 @@ class Test_001:
         print(f'total_calories is {total_calories}')
         assert total_calories == expected, "If dietry-fiber is greater than carbs then calorie count comes negative which is not as expected"
 
+    '''This method will test if negative dietry-fiber is provided then absolute value is not taken 
+        and calorie count is not as expected'''
+    @pytest.mark.xfail
+    def test_if_dietry_fiber_is_negative(self):
+        file = self.test_calorie_sheet()
+        df = pd.read_excel(file)
+        print(df)
+        print(df.iloc[3].tolist())  # Get the third Row from excel using Pandas as a List
+        protein, carbs, dietry_fiber, fat, alcohol, expected = df.iloc[3].tolist()
+        total_calories = Test_001.calculate_calories(protein, carbs, dietry_fiber, fat, alcohol)
+        print(f'total_calories is {total_calories}')
+        assert total_calories == expected, "If dietry-fiber is greater than carbs then calorie count comes"
+
+    '''This method will test invalid inputs that is alphanumeric or string'''
     @pytest.mark.xfail
     def test_calories_with_string_or_alphanumeric_as_input(self):
         file = self.test_calorie_sheet()
@@ -94,17 +105,6 @@ class Test_001:
             if isinstance(input, int) != True:
                 return False
         return True
-
-    @pytest.mark.xfail
-    def test_if_dietry_fiber_is_negative(self):
-        file = self.test_calorie_sheet()
-        df = pd.read_excel(file)
-        print(df)
-        print(df.iloc[3].tolist())  # Get the third Row from excel using Pandas as a List
-        protein, carbs, dietry_fiber, fat, alcohol, expected = df.iloc[3].tolist()
-        total_calories = Test_001.calculate_calories(protein, carbs, dietry_fiber, fat, alcohol)
-        print(f'total_calories is {total_calories}')
-        assert total_calories == expected, "If dietry-fiber is greater than carbs then calorie count comes "
 
 
 
