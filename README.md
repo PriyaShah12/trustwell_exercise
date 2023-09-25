@@ -1,2 +1,4 @@
 # trustwell_exercise
-Calculating calories based on user input
+This project calculaties calories based on user input.
+
+
