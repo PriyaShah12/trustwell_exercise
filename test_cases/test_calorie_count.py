@@ -49,7 +49,6 @@ class Test_001:
         print(f'total_calories is {total_calories}')
         assert expected == total_calories,'If dietry-fiber is greater than carbs then calorie count does not calculate as expected'
 
-
     '''This method will test if dietry-fiber is greater than carbs and calorie count comes negative
         which is not as expected'''
     @pytest.mark.xfail
