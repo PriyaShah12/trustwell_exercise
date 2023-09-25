@@ -73,7 +73,7 @@ class Test_001:
         protein, carbs, dietry_fiber, fat, alcohol, expected = df.iloc[3].tolist()
         total_calories = Test_001.calculate_calories(protein, carbs, dietry_fiber, fat, alcohol)
         print(f'total_calories is {total_calories}')
-        assert total_calories == expected, "If dietry-fiber is greater than carbs then calorie count comes"
+        assert total_calories == expected, "If dietry-fiber is greater than carbs then calorie count comes not as expected"
 
     '''This method will test invalid inputs that is alphanumeric or string'''
     @pytest.mark.xfail
