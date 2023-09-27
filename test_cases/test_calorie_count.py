@@ -62,8 +62,8 @@ class Test_001:
         print(f'total_calories is {total_calories}')
         assert total_calories == expected, "If dietry-fiber is greater than carbs then calorie count comes negative which is not as expected"
 
-    '''This method will test if negative dietry-fiber is provided then absolute value is not taken 
-        and calorie count is not as expected'''
+    '''This method will test if negative dietry-fiber is provided then calorie 
+        count is not as expected (Assuming negative value should be considerd zero)'''
     @pytest.mark.xfail
     def test_if_dietry_fiber_is_negative(self):
         file = self.test_calorie_sheet()
@@ -73,7 +73,7 @@ class Test_001:
         protein, carbs, dietry_fiber, fat, alcohol, expected = df.iloc[3].tolist()
         total_calories = Test_001.calculate_calories(protein, carbs, dietry_fiber, fat, alcohol)
         print(f'total_calories is {total_calories}')
-        assert total_calories == expected, "If dietry-fiber is greater than carbs then calorie count comes not as expected"
+        assert total_calories == expected, "If negative input is provided then calorie count does not match as expeceted"
 
     '''This method will test invalid inputs that is alphanumeric or string'''
     @pytest.mark.xfail
@@ -104,6 +104,8 @@ class Test_001:
             if isinstance(input, int) != True:
                 return False
         return True
+
+
 
 
 
