@@ -21,8 +21,8 @@ class Test_001:
         print(calories)
         return calories
 
-    '''This method will test happy path where all inputs are integers and carbs is
-        greater than dietry-fiber'''
+    '''This method will test happy path where all inputs are integers or float and carbs is
+        greater than dietry-fiber(assumed that int and float values are valid inputs)'''
     def test_calorie_count_with_valid_inputs(self):
         file = self.test_calorie_sheet()
         df = pd.read_excel(file)
@@ -62,7 +62,7 @@ class Test_001:
         print(f'total_calories is {total_calories}')
         assert total_calories == expected, "If dietry-fiber is greater than carbs then calorie count comes negative which is not as expected"
 
-    '''This method will test if negative dietry-fiber is provided then calorie 
+    '''This method will test if negative dietry-fiber is provided then calorie
         count is not as expected (Assuming negative value should be considerd zero)'''
     @pytest.mark.xfail
     def test_if_dietry_fiber_is_negative(self):
